@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_caveofprogramming" default="compile.module.caveofprogramming">
+  <dirname property="module.caveofprogramming.basedir" file="${ant.file.module_caveofprogramming}"/>
+  
+  <property name="module.jdk.home.caveofprogramming" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.caveofprogramming" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.caveofprogramming" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.caveofprogramming" value="-encoding UTF-8 -source 13 -target 13 ${compiler.args}"/>
+  
+  <property name="caveofprogramming.output.dir" value="${module.caveofprogramming.basedir}/out/production/CaveOfProgramming"/>
+  <property name="caveofprogramming.testoutput.dir" value="${module.caveofprogramming.basedir}/out/test/CaveOfProgramming"/>
+  
+  <path id="caveofprogramming.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="caveofprogramming.module.production.classpath">
+    <path refid="${module.jdk.classpath.caveofprogramming}"/>
+  </path>
+  
+  <path id="caveofprogramming.runtime.production.module.classpath">
+    <pathelement location="${caveofprogramming.output.dir}"/>
+  </path>
+  
+  <path id="caveofprogramming.module.classpath">
+    <path refid="${module.jdk.classpath.caveofprogramming}"/>
+    <pathelement location="${caveofprogramming.output.dir}"/>
+  </path>
+  
+  <path id="caveofprogramming.runtime.module.classpath">
+    <pathelement location="${caveofprogramming.testoutput.dir}"/>
+    <pathelement location="${caveofprogramming.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.caveofprogramming">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.caveofprogramming">
+    <patternset refid="excluded.from.module.caveofprogramming"/>
+  </patternset>
+  
+  <path id="caveofprogramming.module.sourcepath">
+    <dirset dir="${module.caveofprogramming.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.caveofprogramming" depends="compile.module.caveofprogramming.production,compile.module.caveofprogramming.tests" description="Compile module CaveOfProgramming"/>
+  
+  <target name="compile.module.caveofprogramming.production" depends="register.custom.compilers" description="Compile module CaveOfProgramming; production classes">
+    <mkdir dir="${caveofprogramming.output.dir}"/>
+    <javac2 destdir="${caveofprogramming.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.caveofprogramming}/javac">
+      <compilerarg line="${compiler.args.caveofprogramming}"/>
+      <bootclasspath refid="caveofprogramming.module.bootclasspath"/>
+      <classpath refid="caveofprogramming.module.production.classpath"/>
+      <src refid="caveofprogramming.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.caveofprogramming"/>
+    </javac2>
+    
+    <copy todir="${caveofprogramming.output.dir}">
+      <fileset dir="${module.caveofprogramming.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.caveofprogramming.tests" depends="register.custom.compilers,compile.module.caveofprogramming.production" description="compile module CaveOfProgramming; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.caveofprogramming" description="cleanup module">
+    <delete dir="${caveofprogramming.output.dir}"/>
+    <delete dir="${caveofprogramming.testoutput.dir}"/>
+  </target>
+</project>
